@@ -8,7 +8,7 @@ function App() {
   const [landmark, setLandmark] = useState([]);
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
-  const [location, setLocation] = useState("bangalore");
+  const [location, setLocation] = useState("");
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -28,17 +28,19 @@ function App() {
   }
 
   useEffect(() => {
-    const fetch = () => {
+    const fetchapi = () => {
       fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`)
         .then(res => res.json())
-        .then(result => 
+        .then(result => (
           setLandmark([
-            ...landmark, 
-            { lat: result.features[0].center[1], long: result.features[0].center[0], location }
-          ]))
+            ...landmark.map((d) => (d.location === location ? { lat: result.features[0].center[1], long: result.features[0].center[0], location } : d)) 
+          ])))
     }
-    fetch(); 
-  }, [location]);
+    location && fetchapi(); 
+    setLat("");
+    setLong("");
+    setLocation("");
+  }, [landmark]);
 
   const addHandler = (e) => {
     e.preventDefault();
@@ -46,9 +48,6 @@ function App() {
       ...landmark, 
       { location }
     ]);
-    setLat("");
-    setLong("");
-    setLocation("");
   }
 
   return (
@@ -97,8 +96,8 @@ function App() {
   
         <div className="box2">
           <div className="block2">
-            {/* <Map /> */}
-            <GoogleMap />
+            <Map />
+            {/* <GoogleMap /> */}
           </div>
         </div>
 

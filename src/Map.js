@@ -1,19 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-mapboxgl.accessToken = "pk.eyJ1Ijoic25laGl0IiwiYSI6ImNrbHJwa201ZDByN2YydmxsY2hxcHNxOGsifQ.YJ4FD5s4CoSxBw-Tt973HQ";
-
-const mapStyles = {
-  width: '100%',
-  height: '100%'
+const style = {
+  position: "absolute",
+  top: 0,
+  right: 0,
+  left: 0,
+  bottom: 0,
+  height: '519px',
+  borderRadius: '0px 0px 36px 0px'
 };
 
-const Map = () => {
+export default function Map() {
   const [state, setState] = useState({
-    lng: 77.594566,
-    lat: 12.971599,
-    zoom: 14
+    lng: 78.962883,
+    lat: 20.593683,
+    zoom: 6
   });
 
   const mapContainer = useRef("");
@@ -26,13 +29,11 @@ const Map = () => {
       center: [state.lng, state.lat],
       zoom: state.zoom
     });
-  }, [state.lng, state.lat, state.zoom]);
+  }, []);
 
   return (
-    <div>
-      <div style={mapStyles} ref={(el) => (mapContainer.current = el)} />
+    <div className="App">
+      <div style={style} ref={(el) => (mapContainer.current = el)} />
     </div>
-  )
+  );
 }
-
-export default Map;
